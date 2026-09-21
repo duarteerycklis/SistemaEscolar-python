@@ -1,31 +1,39 @@
-from alunos import salvar_alunos, verificar_situacao
 from validacoes import notas_validas, disciplinas_validas
-
-def adicionar_disciplinas(alunos, aluno):
-    aluno["disciplinas"] = aluno.get("disciplinas", {})
-    while True:
-        disciplina = disciplinas_validas("Digite o nome da disciplina: ").strip()
-        if disciplina in aluno["disciplinas"]:
-            print("Disciplina já cadastrada.")
-        else:
-            break
-    nota = notas_validas("Digite a nota da disciplina: ")
-    aluno["disciplinas"][disciplina] = nota
-    salvar_alunos(alunos)
+from banco import (
+    criar_tabela_disciplinas,
+    criar_disciplinas_banco,
+    adicionar_disciplinas_banco,
+    remover_disciplinas_banco,
+    atualizar_disciplinas_banco,
+    listar_disciplinas_banco,
+    disciplina_ja_cadastrada_banco
+)
+import alunos
+def adicionar_disciplinas(nome):
+    if disciplina_ja_cadastrada_banco(nome):
+        print("Disciplina já cadastrada.")
+        return
+    resultado = adicionar_disciplinas_banco(nome)
+    if resultado:
+        print("Disciplina adicionada com sucesso.")
+    else:
+        print("Falha ao adicionar disciplina.")
 
 def adicionar_disciplina_aluno(alunos):
     nome = input("Digite o nome completo do aluno que deseja adicionar uma disciplina: ").strip()
     for aluno in alunos:
         if aluno['nome'].lower() == nome.lower():
-            adicionar_disciplinas(alunos, aluno)
+            adicionar_disciplinas(aluno)
             return
+    
     print("Aluno não encontrado.")
-def listar_disciplinas(disciplinas):
+def listar_disciplinas():
+    disciplinas = listar_disciplinas_banco()
     if not disciplinas:
         print("Nenhuma disciplina cadastrada.")
     else:
-        for disciplina, nota in disciplinas.items():
-            print(f"- {disciplina}: {nota}")
+        for disciplina in disciplinas:
+            print(f"- {disciplina[1]}")
 def calcular_media_disciplinas(aluno):
     disciplinas = aluno.get("disciplinas", {})
 
