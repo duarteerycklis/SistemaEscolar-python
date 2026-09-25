@@ -56,3 +56,54 @@ SistemaEscolar-python/
 ├── validacoes.py
 ├── README.md
 └── .gitignore
+
+Descrição dos arquivos
+
+main.py
+Responsável pelo menu principal e pela interação com o usuário.
+
+banco.py
+Responsável pela conexão com o banco de dados SQLite, criação das tabelas e operações de inserção, consulta, atualização e remoção.
+
+alunos.py
+Contém as funcionalidades relacionadas aos alunos, como cadastro, atualização, remoção, notas e situação.
+
+disciplinas.py
+Responsável pelo gerenciamento das disciplinas e pela associação entre alunos e disciplinas.
+
+estatisticas.py
+Contém as funcionalidades de estatísticas, classificação e ordenação dos alunos.
+
+exibicao.py
+Responsável pela apresentação das informações dos alunos.
+
+validacoes.py
+Contém as funções utilizadas para validar entradas, como idade e notas.
+
+Banco de dados
+
+O sistema utiliza SQLite para armazenar os dados.
+
+O arquivo escola.db é criado automaticamente quando o sistema é executado.
+
+Os arquivos do banco de dados não são versionados no GitHub, pois estão configurados no .gitignore.
+
+Como executar
+1. Clone o repositório
+git clone URL_DO_SEU_REPOSITORIO
+2. Entre na pasta
+cd SistemaEscolar-python
+3. Execute o sistema
+python main.py
+
+O banco de dados será criado automaticamente na primeira execução.
+
+Objetivo do projeto
+
+Este projeto foi desenvolvido com o objetivo de praticar conceitos de programação em Python, organização de código, modularização, persistência de dados com SQLite e utilização do Git e GitHub para controle de versão.
+
+Autor
+
+Erycklis Duarte
+
+Projeto desenvolvido para fins acadêmicos e de aprendizado em desenvolvimento de software.
