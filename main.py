@@ -113,7 +113,8 @@ while True:
         consultar_alunos_por_situacao()
 
     elif opcao == "12":
-        
+        disciplina = input("Digite o nome da disciplina que deseja cadastrar")
+        adicionar_disciplina = disciplina
 
 
     elif opcao == "13":
