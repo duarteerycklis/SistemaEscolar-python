@@ -56,13 +56,14 @@ while True:
     print("9. Estatísticas da turma")
     print("10. Ordenar alunos")
     print("11. Consultar alunos por situação")
-    print("12. Adicionar disciplina a um aluno")
-    print("13. Atualizar nota de uma disciplina")
-    print("14. Remover disciplina de um aluno")
-    print("15. Consultar nota de uma disciplina")
-    print("16. Consultar situação das disciplinas de um aluno")
-    print("17. Estatísticas da disciplina")
-    print("18. Estatísticas de todas as disciplinas")
+    print("12. Cadastrar disciplina")
+    print("13. Adicionar disciplina a um aluno")
+    print("14. Atualizar nota de uma disciplina")
+    print("15. Remover disciplina de um aluno")
+    print("16. Consultar nota de uma disciplina")
+    print("17. Consultar situação das disciplinas de um aluno")
+    print("18. Estatísticas da disciplina")
+    print("19. Estatísticas de todas as disciplinas")
     print("0. Sair")
 
     opcao = input("Escolha uma opção: ")
@@ -111,8 +112,11 @@ while True:
     elif opcao == "11":
         consultar_alunos_por_situacao()
 
-
     elif opcao == "12":
+        
+
+
+    elif opcao == "13":
         print("Digite o Nome do aluno e o Nome da disciplina")
 
         aluno_nome = input("Nome do aluno: ")
@@ -124,7 +128,7 @@ while True:
         )
 
 
-    elif opcao == "13":
+    elif opcao == "14":
         print("Digite o Nome do aluno e o Nome da disciplina")
 
         aluno_nome = input("Nome do aluno: ")
@@ -136,7 +140,7 @@ while True:
         )
 
 
-    elif opcao == "14":
+    elif opcao == "15":
         print("Digite o Nome do aluno e o Nome da disciplina")
 
         aluno_nome = input("Nome do aluno: ")
@@ -148,7 +152,7 @@ while True:
         )
 
 
-    elif opcao == "15":
+    elif opcao == "16":
         print("Digite o Nome do aluno e o Nome da disciplina")
 
         aluno_nome = input("Nome do aluno: ")
@@ -160,7 +164,7 @@ while True:
         )
 
 
-    elif opcao == "16":
+    elif opcao == "17":
         print("Digite o Nome do aluno e o Nome da disciplina")
 
         aluno_nome = input("Nome do aluno: ")
@@ -174,7 +178,7 @@ while True:
         print(f"Situação da disciplina: {situacao}")
 
 
-    elif opcao == "17":
+    elif opcao == "18":
         print("Digite o Nome da disciplina")
 
         disciplina_nome = input("Nome da disciplina: ")
@@ -182,7 +186,7 @@ while True:
         estatisticas_da_disciplina(disciplina_nome)
 
 
-    elif opcao == "18":
+    elif opcao == "19":
         estatistica_de_todas_disciplinas()
 
 
