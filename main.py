@@ -1,40 +1,50 @@
+from banco import criar_tabelas
+
 from alunos import (
-    carregar_alunos,
-    cadastrar_alunos,
-    remover_aluno,
+    cadastrar_aluno,
     atualizar_aluno,
+    remover_aluno,
     atualizar_nota,
-    calcular_media,
     consultar_situacao,
-    obter_nota
+    calcular_media,
 )
-from banco import inserir_aluno, listar_alunos_banco, pesquisar_aluno_banco, converter_alunos
+
 from disciplinas import (
+    adicionar_disciplina,
     adicionar_disciplina_aluno,
+    listar_disciplinas_aluno,
+    pesquisar_disciplina,
+    atualizar_disciplina,
+    remover_disciplina,
     atualizar_nota_disciplina,
     remover_disciplina_aluno,
-    consultar_nota_disciplina_aluno,
-    consultar_situacao_disciplinas,
-    
+    consultar_disciplina_aluno,
+    verificar_situacao_disciplina,
+    exibir_disciplina_aluno,
+    estatisticas_disciplina,
 )
-from validacoes import*
-from exibicao import listar_alunos, pesquisar_aluno
-from estatisticas import (
-    estatisticas_turma,
-    ordenar_alunos,
-    consultar_alunos_por_situacao,
-    estatisticas_da_disciplina,
-    estatistica_de_todas_disciplinas
-)
-from banco import criar_tabelas
-criar_tabelas()
 
-alunos = listar_alunos_banco()
-alunos = converter_alunos(alunos)
+from exibicao import (
+    listar_alunos,
+    alunos_cadastrados,
+    pesquisar_aluno,
+)
+
+from estatisticas import (
+    estatisticas_da_disciplina,
+    estatistica_de_todas_disciplinas,
+    estatisticas_turma,
+    consultar_alunos_por_situacao,
+    ordenar_alunos,
+)
+
+
+criar_tabelas()
 
 
 while True:
-    print("\n========Menu========")
+
+    print("\n======== MENU ========")
     print("1. Cadastrar aluno")
     print("2. Listar alunos")
     print("3. Pesquisar aluno")
@@ -45,7 +55,7 @@ while True:
     print("8. Consultar situação do aluno")
     print("9. Estatísticas da turma")
     print("10. Ordenar alunos")
-    print("11. Consultar alunos por situação") 
+    print("11. Consultar alunos por situação")
     print("12. Adicionar disciplina a um aluno")
     print("13. Atualizar nota de uma disciplina")
     print("14. Remover disciplina de um aluno")
@@ -54,47 +64,132 @@ while True:
     print("17. Estatísticas da disciplina")
     print("18. Estatísticas de todas as disciplinas")
     print("0. Sair")
+
     opcao = input("Escolha uma opção: ")
 
+
     if opcao == "1":
-        alunos = cadastrar_alunos(alunos)
+        cadastrar_aluno()
+
+
     elif opcao == "2":
         listar_alunos()
+
+
     elif opcao == "3":
         pesquisar_aluno()
+
+
     elif opcao == "4":
-        alunos = remover_aluno(alunos)
+        remover_aluno()
+
+
     elif opcao == "5":
-        alunos = atualizar_aluno(alunos)
+        atualizar_aluno()
+
+
     elif opcao == "6":
-        alunos = atualizar_nota(alunos)
+        atualizar_nota()
+
+
     elif opcao == "7":
-        calcular_media(alunos)
+        calcular_media()
+
+
     elif opcao == "8":
-        consultar_situacao(alunos)
+        consultar_situacao()
+
+
     elif opcao == "9":
-        estatisticas_turma(alunos)
+        estatisticas_turma()
+
+
     elif opcao == "10":
-        ordenar_alunos(alunos)
+        ordenar_alunos()
+
+
     elif opcao == "11":
-        consultar_alunos_por_situacao(alunos)
+        consultar_alunos_por_situacao()
+
+
     elif opcao == "12":
-        adicionar_disciplina_aluno(alunos)
+        print("Digite o Nome do aluno e o Nome da disciplina")
+
+        aluno_nome = input("Nome do aluno: ")
+        disciplina_nome = input("Nome da disciplina: ")
+
+        adicionar_disciplina_aluno(
+            aluno_nome,
+            disciplina_nome
+        )
+
+
     elif opcao == "13":
-        atualizar_nota_disciplina(alunos)
+        print("Digite o Nome do aluno e o Nome da disciplina")
+
+        aluno_nome = input("Nome do aluno: ")
+        disciplina_nome = input("Nome da disciplina: ")
+
+        atualizar_nota_disciplina(
+            aluno_nome,
+            disciplina_nome
+        )
+
+
     elif opcao == "14":
-        remover_disciplina_aluno(alunos)
+        print("Digite o Nome do aluno e o Nome da disciplina")
+
+        aluno_nome = input("Nome do aluno: ")
+        disciplina_nome = input("Nome da disciplina: ")
+
+        remover_disciplina_aluno(
+            aluno_nome,
+            disciplina_nome
+        )
+
+
     elif opcao == "15":
-        consultar_nota_disciplina_aluno(alunos)
+        print("Digite o Nome do aluno e o Nome da disciplina")
+
+        aluno_nome = input("Nome do aluno: ")
+        disciplina_nome = input("Nome da disciplina: ")
+
+        exibir_disciplina_aluno(
+            aluno_nome,
+            disciplina_nome
+        )
+
+
     elif opcao == "16":
-        consultar_situacao_disciplinas(alunos)
+        print("Digite o Nome do aluno e o Nome da disciplina")
+
+        aluno_nome = input("Nome do aluno: ")
+        disciplina_nome = input("Nome da disciplina: ")
+
+        situacao = verificar_situacao_disciplina(
+            aluno_nome,
+            disciplina_nome
+        )
+
+        print(f"Situação da disciplina: {situacao}")
+
+
     elif opcao == "17":
-        estatisticas_da_disciplina(alunos)
+        print("Digite o Nome da disciplina")
+
+        disciplina_nome = input("Nome da disciplina: ")
+
+        estatisticas_da_disciplina(disciplina_nome)
+
+
     elif opcao == "18":
-        estatistica_de_todas_disciplinas(alunos)
+        estatistica_de_todas_disciplinas()
+
+
     elif opcao == "0":
+        print("Saindo do sistema...")
         break
+
+
     else:
-        print("Opção inválida.")
-
-
+        print("Opção inválida. Tente novamente.")

@@ -1,44 +1,56 @@
-from alunos import obter_nota, verificar_situacao
-from disciplinas import listar_disciplinas, calcular_media_disciplinas
-from banco import pesquisar_aluno_banco, listar_alunos_banco, converter_alunos
+from alunos import verificar_situacao
+from disciplinas import listar_disciplinas_aluno
+from banco import pesquisar_aluno_banco, listar_alunos_banco
+
 
 def exibir_aluno(aluno):
-    nota = aluno.get('nota', 'N/A')
-    situacao = verificar_situacao(obter_nota(aluno))
     print(
-        f"\n Nome: {aluno['nome']}"
-        f"\n Idade: {aluno['idade']}"
-        f"\n Nota: {nota}"
-        f"\n Situação: {situacao}"
+        f"\nNome: {aluno[1]}"
+        f"\nIdade: {aluno[2]}"
+        f"\nNota: {aluno[3]}"
+        f"\nSituação: {verificar_situacao(aluno[3])}"
     )
-    if aluno.get("disciplinas"):
+
+    disciplinas = listar_disciplinas_aluno(aluno[0])
+
+    if disciplinas:
         print("Disciplinas do aluno:")
-        listar_disciplinas(aluno["disciplinas"])
-        media = calcular_media_disciplinas(aluno)
-        print(f"Média das disciplinas: {media}")
+
+        for disciplina in disciplinas:
+            print(f"- {disciplina[1]}")
     else:
         print("O aluno não possui disciplinas cadastradas.")
-def listar_alunos(alunos):
+
+
+def listar_alunos():
     resultados = listar_alunos_banco()
-    resultados = converter_alunos(resultados)
-    if resultados:
-        for aluno in resultados:
-            exibir_aluno(aluno)
-    else:
-        print("Nenhum aluno cadastrado.")
-        
-def alunos_cadastrados():
-    resultados = listar_alunos_banco()
-    resultados = converter_alunos(resultados)
+
     if not resultados:
         print("Nenhum aluno cadastrado.")
         return
+
     for aluno in resultados:
         exibir_aluno(aluno)
+
+
+def alunos_cadastrados():
+    resultados = listar_alunos_banco()
+
+    if not resultados:
+        print("Nenhum aluno cadastrado.")
+        return
+
+    for aluno in resultados:
+        exibir_aluno(aluno)
+
+
 def pesquisar_aluno():
-    nome = input("Digite o nome do Aluno que deseja Pesquisar: ").strip()
+    nome = input(
+        "Digite o nome do Aluno que deseja Pesquisar: "
+    ).strip()
+
     resultados = pesquisar_aluno_banco(nome)
-    resultados = converter_alunos(resultados)
+
     if resultados:
         for aluno in resultados:
             exibir_aluno(aluno)

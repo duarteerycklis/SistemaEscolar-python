@@ -1,96 +1,193 @@
-from alunos import obter_nota, verificar_situacao
-from disciplinas import consultar_nota_disciplina, situacao_disciplina
-from exibicao import alunos_cadastrados
-def estatisticas_da_disciplina(alunos, disciplina=None):
+from banco import listar_alunos_banco
+from alunos import verificar_situacao
+from disciplinas import listar_disciplinas_aluno
+
+
+def estatisticas_da_disciplina(disciplina=None):
     if disciplina is None:
-        disciplina = input("Digite o nome da disciplina para ver as estatísticas: ").strip()
+        disciplina = input(
+            "Digite o nome da disciplina para ver as estatísticas: "
+        ).strip()
+
     aprovados = 0
     reprovados = 0
     recuperacao = 0
+    soma_notas = 0
     total = 0
-    count = 0
+
+    alunos = listar_alunos_banco()
+
     for aluno in alunos:
-        nota = consultar_nota_disciplina(aluno, disciplina)
+        nota = None
+
+        disciplinas_aluno = listar_disciplinas_aluno(aluno[0])
+
+        for d in disciplinas_aluno:
+            if d[1] == disciplina:
+                nota = d[2]
+                break
+
         if nota is not None:
-            situacao = situacao_disciplina(aluno, disciplina)
-            if situacao == "Aprovado":
+            if nota >= 7:
                 aprovados += 1
-            elif situacao == "Reprovado":
-                reprovados += 1
-            elif situacao == "Recuperação":
+            elif nota >= 5:
                 recuperacao += 1
-            total += nota
-            count += 1
-    if count == 0:
+            else:
+                reprovados += 1
+
+            soma_notas += nota
+            total += 1
+
+    if total == 0:
         print("Nenhum aluno possui esta disciplina cadastrada.")
     else:
-        media = total / count
-        print(f"Média da disciplina {disciplina}: {media:.2f}")
+        media = soma_notas / total
+
+        print(
+            f"Total de alunos com a disciplina {disciplina}: {total}"
+        )
         print(f"Aprovados: {aprovados}")
         print(f"Reprovados: {reprovados}")
         print(f"Recuperação: {recuperacao}")
-        print(f"Total de alunos com a disciplina: {count}")
-def estatistica_de_todas_disciplinas(alunos):
+        print(f"Média das notas: {media:.2f}")
+
+
+def estatistica_de_todas_disciplinas():
     disciplinas = set()
+
+    alunos = listar_alunos_banco()
+
     for aluno in alunos:
-        for disciplina in aluno.get("disciplinas", {}):
-            disciplinas.add(disciplina)
+        disciplinas_aluno = listar_disciplinas_aluno(aluno[0])
+
+        for disciplina in disciplinas_aluno:
+            disciplinas.add(disciplina[1])
+
     for disciplina in disciplinas:
         print(f"\nEstatísticas da disciplina: {disciplina}")
-        estatisticas_da_disciplina(alunos, disciplina)
+        estatisticas_da_disciplina(disciplina)
+
     if not disciplinas:
         print("Nenhuma disciplina cadastrada.")
-def estatisticas_turma(alunos):
+
+
+def estatisticas_turma():
+    alunos = listar_alunos_banco()
+
     if not alunos:
         print("Nenhum aluno cadastrado.")
         return
+
     total_alunos = len(alunos)
-    aprovados = sum(1 for aluno in alunos if verificar_situacao(obter_nota(aluno)) == "Aprovado")
-    recuperacao = sum(1 for aluno in alunos if verificar_situacao(obter_nota(aluno)) == "Recuperação")
-    reprovados = sum(1 for aluno in alunos if verificar_situacao(obter_nota(aluno)) == "Reprovado")
+
+    aprovados = sum(
+        1
+        for aluno in alunos
+        if verificar_situacao(aluno[3]) == "Aprovado"
+    )
+
+    recuperacao = sum(
+        1
+        for aluno in alunos
+        if verificar_situacao(aluno[3]) == "Recuperação"
+    )
+
+    reprovados = sum(
+        1
+        for aluno in alunos
+        if verificar_situacao(aluno[3]) == "Reprovado"
+    )
 
     print("========== Estatísticas da turma ==========\n")
-    print(f"\n Total de alunos: {total_alunos}")
-    print(f"\n Aprovados: {aprovados}")
-    print(f"\n Recuperação: {recuperacao}")
-    print(f"\n Reprovados: {reprovados}")
-    print(f"\n Maior nota: {max(obter_nota(aluno) for aluno in alunos)}")
-    print(f"\n Menor nota: {min(obter_nota(aluno) for aluno in alunos)}")
-    print(f"\n Média da turma: {sum(obter_nota(aluno) for aluno in alunos) / len(alunos)}")
 
-def alunos_por_situacao(alunos, situacao_desejada):
-    alunos_filtrados = [aluno for aluno in alunos if verificar_situacao(obter_nota(aluno)) == situacao_desejada]
-    if not alunos_filtrados:
-        print(f"Nenhum aluno com situação '{situacao_desejada}'.")
+    print(f"\nTotal de alunos: {total_alunos}")
+    print(f"\nAprovados: {aprovados}")
+    print(f"\nRecuperação: {recuperacao}")
+    print(f"\nReprovados: {reprovados}")
+
+    print(
+        f"\nMaior nota: "
+        f"{max(aluno[3] for aluno in alunos)}"
+    )
+
+    print(
+        f"\nMenor nota: "
+        f"{min(aluno[3] for aluno in alunos)}"
+    )
+
+    print(
+        f"\nMédia da turma: "
+        f"{sum(aluno[3] for aluno in alunos) / len(alunos)}"
+    )
+
+
+def alunos_por_situacao(situacao_desejada):
+    alunos = listar_alunos_banco()
+
+    if not alunos:
+        print("Nenhum aluno cadastrado.")
         return
+
+    alunos_filtrados = [
+        aluno
+        for aluno in alunos
+        if verificar_situacao(aluno[3]) == situacao_desejada
+    ]
+
+    if not alunos_filtrados:
+        print(
+            f"Nenhum aluno com situação "
+            f"'{situacao_desejada}'."
+        )
+        return
+
     for aluno in alunos_filtrados:
-        print(f"Nome: {aluno['nome']}, Nota: {aluno['nota']}\n")
-    print(f"Total de alunos com situação '{situacao_desejada}': {len(alunos_filtrados)}")
+        print(
+            f"Nome: {aluno[1]}, "
+            f"Nota: {aluno[3]}\n"
+        )
+
+    print(
+        f"Total de alunos com situação "
+        f"'{situacao_desejada}': {len(alunos_filtrados)}"
+    )
+
     print("==========================================")
 
-def consultar_alunos_por_situacao(alunos):
+
+def consultar_alunos_por_situacao():
     while True:
         print("Escolha a situação desejada:")
         print("1. Aprovado")
         print("2. Recuperação")
         print("3. Reprovado")
         print("0. Voltar")
+
         opcao = input("Escolha uma opção: ")
 
         if opcao == "1":
-            alunos_por_situacao(alunos, "Aprovado")
+            alunos_por_situacao("Aprovado")
+
         elif opcao == "2":
-            alunos_por_situacao(alunos, "Recuperação")
+            alunos_por_situacao("Recuperação")
+
         elif opcao == "3":
-            alunos_por_situacao(alunos, "Reprovado")
+            alunos_por_situacao("Reprovado")
+
         elif opcao == "0":
             return
+
         else:
             print("Opção inválida.")
-def ordenar_alunos(alunos):
+
+
+def ordenar_alunos():
+    alunos = listar_alunos_banco()
+
     if not alunos:
         print("Nenhum aluno cadastrado.")
         return
+
     while True:
         print("Escolha o critério de ordenação:")
         print("1. Maior nota")
@@ -98,29 +195,74 @@ def ordenar_alunos(alunos):
         print("3. Ordem alfabética A-Z")
         print("4. Ordem alfabética Z-A")
         print("0. Voltar")
-        opcao = input("Escolha uma opção: ") 
 
+        opcao = input("Escolha uma opção: ")
 
         if opcao == "1":
             print("Ordenando alunos por Maior nota\n")
-            alunos_ordenado = sorted(alunos, key=lambda aluno: obter_nota(aluno), reverse=True)
-            alunos_cadastrados(alunos_ordenado)
+
+            alunos_ordenado = sorted(
+                alunos,
+                key=lambda aluno: aluno[3],
+                reverse=True
+            )
+
+            for aluno in alunos_ordenado:
+                print(
+                    f"Nome: {aluno[1]}, "
+                    f"Nota: {aluno[3]}\n"
+                )
+
         elif opcao == "2":
             print("Ordenando alunos por Menor nota\n")
-            alunos_ordenado = sorted(alunos, key=lambda aluno: obter_nota(aluno), reverse=False)
-            alunos_cadastrados(alunos_ordenado)
+
+            alunos_ordenado = sorted(
+                alunos,
+                key=lambda aluno: aluno[3],
+                reverse=False
+            )
+
+            for aluno in alunos_ordenado:
+                print(
+                    f"Nome: {aluno[1]}, "
+                    f"Nota: {aluno[3]}\n"
+                )
+
         elif opcao == "3":
-            print("Ordenando alunos por ordem alfabética A-Z\n")
-            alunos_ordenado = sorted(alunos, key=lambda aluno: aluno['nome'])
-            alunos_cadastrados(alunos_ordenado)
+            print(
+                "Ordenando alunos por ordem alfabética A-Z\n"
+            )
+
+            alunos_ordenado = sorted(
+                alunos,
+                key=lambda aluno: aluno[1]
+            )
+
+            for aluno in alunos_ordenado:
+                print(
+                    f"Nome: {aluno[1]}, "
+                    f"Nota: {aluno[3]}\n"
+                )
+
         elif opcao == "4":
-            print("Ordenando alunos por ordem alfabética Z-A\n")
-            alunos_ordenado = sorted(alunos, key=lambda aluno: aluno['nome'], reverse=True)
-            alunos_cadastrados(alunos_ordenado)
+            print(
+                "Ordenando alunos por ordem alfabética Z-A\n"
+            )
+
+            alunos_ordenado = sorted(
+                alunos,
+                key=lambda aluno: aluno[1],
+                reverse=True
+            )
+
+            for aluno in alunos_ordenado:
+                print(
+                    f"Nome: {aluno[1]}, "
+                    f"Nota: {aluno[3]}\n"
+                )
+
         elif opcao == "0":
             break
+
         else:
             print("Opção inválida. Tente novamente.")
-    
-    
-    
