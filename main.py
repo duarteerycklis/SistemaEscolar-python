@@ -12,21 +12,14 @@ from alunos import (
 from disciplinas import (
     adicionar_disciplina,
     adicionar_disciplina_aluno,
-    listar_disciplinas_aluno,
-    pesquisar_disciplina,
-    atualizar_disciplina,
-    remover_disciplina,
     atualizar_nota_disciplina,
     remover_disciplina_aluno,
-    consultar_disciplina_aluno,
     verificar_situacao_disciplina,
     exibir_disciplina_aluno,
-    estatisticas_disciplina,
 )
 
 from exibicao import (
     listar_alunos,
-    alunos_cadastrados,
     pesquisar_aluno,
 )
 
@@ -113,8 +106,8 @@ while True:
         consultar_alunos_por_situacao()
 
     elif opcao == "12":
-        disciplina = input("Digite o nome da disciplina que deseja cadastrar")
-        adicionar_disciplina = disciplina
+        disciplina = input("Digite o nome da disciplina que deseja cadastrar: ")
+        adicionar_disciplina(disciplina)
 
 
     elif opcao == "13":

@@ -74,14 +74,21 @@ def nome_ja_cadastrado_banco(nome):
     cursor = conn.cursor()
 
     cursor.execute(
-        "SELECT id FROM alunos WHERE nome = ?",
-        (nome,)
+        "SELECT nome FROM alunos",
     )
 
-    aluno = cursor.fetchone()
+    alunos = cursor.fetchall()
+
+    nome_digitado = nome.strip().casefold()
+
+    for aluno in alunos:
+        nome_cadastrado = aluno[0].strip().casefold()
+        if nome_cadastrado == nome_digitado:
+            conn.close()
+            return True
 
     conn.close()
-    return aluno is not None
+    return False
 
 
 def converter_aluno(alunos):
@@ -150,7 +157,7 @@ def remover_aluno_banco(id):
         return "possui_disciplina"
 
     cursor.execute(
-        "DELETE FROM alunos WHERE id = ? LIMIT 1",
+        "DELETE FROM alunos WHERE id = ?",
         (id,)
     )
 
@@ -229,7 +236,7 @@ def remover_disciplina_banco(id):
         return "possui_aluno"
 
     cursor.execute(
-        "DELETE FROM disciplinas WHERE id = ? LIMIT 1",
+        "DELETE FROM disciplinas WHERE id = ?",
         (id,)
     )
 
@@ -277,14 +284,20 @@ def disciplina_ja_cadastrada(nome):
     cursor = conn.cursor()
 
     cursor.execute(
-        "SELECT id FROM disciplinas WHERE nome = ?",
-        (nome,)
+        "SELECT nome FROM disciplinas",
     )
 
-    disciplina = cursor.fetchone()
+    disciplinas = cursor.fetchall()
+    nome_digitado = nome.strip().casefold()
+
+    for disciplina in disciplinas:
+        nome_cadastrado = disciplina[0].strip().casefold()
+        if nome_cadastrado == nome_digitado:
+            conn.close()
+            return True
 
     conn.close()
-    return disciplina is not None
+    return False
 
 
 def adicionar_disciplina_aluno_banco(id_aluno, id_disciplina, nota):
@@ -312,8 +325,12 @@ def pesquisar_disciplina_banco(nome):
     conn = conectar_banco()
     cursor = conn.cursor()
 
+    nome = nome.strip().casefold()
     cursor.execute(
-        "SELECT id, nome FROM disciplinas WHERE nome = ?",
+        """SELECT id, nome
+        FROM disciplinas
+        WHERE LOWER(nome) = LOWER(?)
+        """,
         (nome,)
     )
 
@@ -341,7 +358,7 @@ def listar_disciplinas_aluno_banco(id_aluno):
     return disciplinas
 
 
-def atualizar_nota_disciplina_banco(nota, id_aluno, id_disciplina ):
+def atualizar_nota_disciplina_banco(id_aluno, id_disciplina, nota):
     conn = conectar_banco()
     cursor = conn.cursor()
 
