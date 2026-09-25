@@ -1,0 +1,5 @@
+escola.db
+escola_backup.db
+alunos.json
+__pycache__/
+*.pyc
